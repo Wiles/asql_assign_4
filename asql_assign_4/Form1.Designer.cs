@@ -28,25 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_connect = new System.Windows.Forms.Button();
             this.gb_source = new System.Windows.Forms.GroupBox();
             this.tb_source = new System.Windows.Forms.TextBox();
             this.gb_dest = new System.Windows.Forms.GroupBox();
             this.tb_dest = new System.Windows.Forms.TextBox();
             this.tb_todo = new System.Windows.Forms.TextBox();
+            this.btn_copy = new System.Windows.Forms.Button();
             this.gb_source.SuspendLayout();
             this.gb_dest.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button1
+            // btn_connect
             // 
-            this.button1.Location = new System.Drawing.Point(13, 13);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btn_connect.Location = new System.Drawing.Point(13, 13);
+            this.btn_connect.Name = "btn_connect";
+            this.btn_connect.Size = new System.Drawing.Size(75, 23);
+            this.btn_connect.TabIndex = 0;
+            this.btn_connect.Text = "Connect";
+            this.btn_connect.UseVisualStyleBackColor = true;
+            this.btn_connect.Click += new System.EventHandler(this.button1_Click);
             // 
             // gb_source
             // 
@@ -70,6 +71,7 @@
             this.tb_source.Size = new System.Drawing.Size(298, 20);
             this.tb_source.TabIndex = 0;
             this.tb_source.Text = "Data Source=SAMUEL-LAPTOP;Initial Catalog=source;Integrated Security=True";
+            this.tb_source.TextChanged += new System.EventHandler(this.tb_source_TextChanged);
             // 
             // gb_dest
             // 
@@ -92,25 +94,39 @@
             this.tb_dest.Name = "tb_dest";
             this.tb_dest.Size = new System.Drawing.Size(298, 20);
             this.tb_dest.TabIndex = 0;
-            this.tb_dest.Text = "Data Source=SAMUEL-LAPTOP;Initial Catalog=empty_dest;Integrated Security=True";
+            this.tb_dest.Text = "Data Source=SAMUEL-LAPTOP;Initial Catalog=tables_exist;Integrated Security=True";
+            this.tb_dest.TextChanged += new System.EventHandler(this.tb_dest_TextChanged);
             // 
             // tb_todo
             // 
+            this.tb_todo.Enabled = false;
             this.tb_todo.Location = new System.Drawing.Point(13, 158);
             this.tb_todo.Multiline = true;
             this.tb_todo.Name = "tb_todo";
             this.tb_todo.Size = new System.Drawing.Size(311, 344);
             this.tb_todo.TabIndex = 3;
             // 
+            // btn_copy
+            // 
+            this.btn_copy.Enabled = false;
+            this.btn_copy.Location = new System.Drawing.Point(95, 13);
+            this.btn_copy.Name = "btn_copy";
+            this.btn_copy.Size = new System.Drawing.Size(75, 23);
+            this.btn_copy.TabIndex = 4;
+            this.btn_copy.Text = "Copy";
+            this.btn_copy.UseVisualStyleBackColor = true;
+            this.btn_copy.Click += new System.EventHandler(this.btn_copy_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(629, 504);
+            this.Controls.Add(this.btn_copy);
             this.Controls.Add(this.tb_todo);
             this.Controls.Add(this.gb_dest);
             this.Controls.Add(this.gb_source);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btn_connect);
             this.Name = "Form1";
             this.Text = "Form1";
             this.gb_source.ResumeLayout(false);
@@ -124,12 +140,13 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_connect;
         private System.Windows.Forms.GroupBox gb_source;
         private System.Windows.Forms.TextBox tb_source;
         private System.Windows.Forms.GroupBox gb_dest;
         private System.Windows.Forms.TextBox tb_dest;
         private System.Windows.Forms.TextBox tb_todo;
+        private System.Windows.Forms.Button btn_copy;
     }
 }
 

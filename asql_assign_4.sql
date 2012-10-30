@@ -60,3 +60,26 @@ create table users
 	email nvarchar(50)
 )
 go
+
+
+create database tables_exist;
+go
+
+use tables_exist;
+go
+
+create table users
+(
+	id int,
+	name nvarchar(20),
+	email nvarchar(50)
+)
+go
+
+create table products
+(
+	id int,
+	name nvarchar(20),
+	cost money
+)
+go

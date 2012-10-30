@@ -12,6 +12,8 @@ namespace asql_assign_4
 {
     public partial class Form1 : Form
     {
+        List<String> sourceOnly;
+        List<String> both;
 
         public Form1()
         {
@@ -21,6 +23,7 @@ namespace asql_assign_4
         private void button1_Click(object sender, EventArgs e)
         {
             tb_todo.Clear();
+            btn_copy.Enabled = false;
             Dictionary<String, List<Row>> source = LoadDB(tb_source.Text);
             Dictionary<String, List<Row>> dest = LoadDB(tb_dest.Text);
             List<String> match = new List<string>();
@@ -64,17 +67,23 @@ namespace asql_assign_4
                 }
             }
 
-            if(mismatch.Count() != 0)
+            if (mismatch.Count() != 0)
             {
                 StringBuilder message = new StringBuilder();
                 message.Append("The following Tables exist in both databases but contain different columns");
-                foreach(var s in mismatch)
+                foreach (var s in mismatch)
                 {
                     message.Append(Environment.NewLine);
                     message.Append(s);
                 }
                 MessageBox.Show(message.ToString());
                 return;
+            }
+            else
+            {
+                sourceOnly = source_only.ToList<String>();
+                this.both = both.ToList<String>();
+                btn_copy.Enabled = true;
             }
         }
 
@@ -147,6 +156,66 @@ namespace asql_assign_4
             {
                 return (name + type + size).GetHashCode();
             }
+        }
+
+        private void btn_copy_Click(object sender, EventArgs e)
+        {
+            CopyDb(tb_source.Text, tb_dest.Text);
+        }
+
+        private void CopyDb(String source, String destination)
+        {
+            
+            SqlConnection sourceDb = null;
+            SqlConnection destDb = null;
+            SqlTransaction sourceTrans = null;
+            SqlTransaction destTrans = null;
+            try{
+                sourceDb = new SqlConnection(source);
+                destDb = new SqlConnection(destination);
+                sourceDb.Open();
+                destDb.Open();
+                sourceTrans = sourceDb.BeginTransaction();
+                destTrans = destDb.BeginTransaction();
+
+                if (both != null && both.Count > 0)
+                {
+                    foreach (var table in both)
+                    {
+                        SqlCommand cmd = new SqlCommand(String.Format(@"select * from {0}", table), sourceDb);
+                        cmd.Transaction = sourceTrans;
+                        SqlDataReader results = cmd.ExecuteReader();
+
+                        SqlBulkCopy bulkCopy = new SqlBulkCopy(destDb, SqlBulkCopyOptions.Default, destTrans);
+                        bulkCopy.DestinationTableName = table;
+                        bulkCopy.WriteToServer(results);
+                        results.Close();
+                        bulkCopy.Close();
+                    }
+                }
+                sourceTrans.Commit();
+                destTrans.Commit();
+                btn_copy.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+                sourceTrans.Rollback();
+                destTrans.Rollback();
+                sourceDb.Close();
+                destDb.Close();
+
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void tb_source_TextChanged(object sender, EventArgs e)
+        {
+            btn_copy.Enabled = false;
+        }
+
+        private void tb_dest_TextChanged(object sender, EventArgs e)
+        {
+            btn_copy.Enabled = false;
         }
     }
 }
